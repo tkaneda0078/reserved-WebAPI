@@ -1,11 +1,11 @@
 <?php
-    // エラー内容を確認
-    ini_set("display_errors", On);
-    error_reporting(E_ALL);
-    
-    require '';
-    
+
     session_start();
+    
+    require 'db.php';
+    
+    // データを登録後に予約レコードを発行
+    $reserve_code = insert();
     
 ?>
 
