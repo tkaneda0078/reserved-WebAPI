@@ -37,7 +37,7 @@ class Api
         {
             echo 'Connection failed: ' . $e->getMessage();
             echo 'DB接続失敗';
-            exit;
+            exit();
         }
     }
 
@@ -83,6 +83,40 @@ class Api
             echo 'ERROR:' . $e->getMessage();
             echo '登録失敗';
             exit;
+        }
+    }
+
+    /*
+     * 予約データを取得
+     * 
+     * 予約コードをもとにDBから予約データを取得
+     * 
+     * @access public
+     * $return array $reserve_code 予約データ
+     */
+
+    public function fetchReservedData($reserve_code)
+    {
+        try
+        {
+            $sql = "SELECT name, email FROM reserved WHERE reserve_code = '{$reserve_code}'";
+
+            $stmt = $this->dbh->query($sql);
+            $reserved_data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (isset($reserved_data))
+            {
+                echo '取得できるデータはありません。';
+                exit();
+            }
+
+            return $reserved_data;
+        }
+        catch (Exception $ex)
+        {
+            echo 'ERROR:' . $ex->getMessage();
+            echo '予約データ取得失敗';
+            exit();
         }
     }
 
