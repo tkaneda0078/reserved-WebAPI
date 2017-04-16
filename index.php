@@ -22,7 +22,7 @@
             $_SESSION['name']  = $name;
             $_SESSION['email'] = $email;
 
-            header('location:confirm.php');
+            header('location:issue.php');
             exit();
         }
     }
