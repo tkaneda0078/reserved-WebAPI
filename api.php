@@ -99,9 +99,10 @@ class Api
     {
         try
         {
-            $sql = "SELECT name, email FROM reserved WHERE reserve_code = '{$reserve_code}'";
+            $sql = "SELECT name, email FROM reserved WHERE reserve_code = :reserve_code";
 
-            $stmt = $this->dbh->query($sql);
+            $stmt = $this->dbh->prepare($sql);
+            $stmt->execute(array(':reserve_code' => $reserve_code));
             $reserved_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (isset($reserved_data))
@@ -133,6 +134,34 @@ class Api
         $unique_code = uniqid(mt_rand());
 
         return $unique_code;
+    }
+
+    /*
+     * 既に登録されているメールアドレスを取得
+     * 
+     * 重複チャック時に使用
+     * 
+     * @access public
+     * $return boolean
+     */
+
+    public function fetchDuplicateMailAddress($email)
+    {
+        try
+        {
+            $sql = "SELECT email FROM reserved WHERE email = :email limit 1";
+            $stmt = $this->dbh->prepare($sql);
+            $stmt->execute(array(':email' => $email));
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $data['email'];
+        }
+        catch (Exception $ex)
+        {
+            echo 'ERROR:' . $ex->getMessage();
+            echo 'メールアドレス取得失敗。';
+            exit();
+        }
     }
 
 }

@@ -6,7 +6,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/validation.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
 
-    if (isset($_POST['reserve_code']))
+    if (!isset($_POST['reserve_code']))
     {
         $_SESSION['reserve_code'] = $_POST['reserve_code'];
         header('location:data/display.php');
@@ -15,18 +15,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
     $error_msg = array();
 
-    $name = $_POST['name'];
+    $name  = $_POST['name'];
     $email = $_POST['email'];
 
     $val = new Validation();
     foreach ($_POST as $key => $value)
     {
+        if ($key == 'reserve_code')
+        {
+            continue;
+        }
+
         $error_msg[$key] = $val->isNull($value);
     }
+
     $error_msg[] = $val->isLength($name);
+
     $error_msg[] = $val->isMailaddress($email);
 
-    if ($error_msg == true)
+    if (!isset($error_msg))
     {
         $_SESSION['name'] = $name;
         $_SESSION['email'] = $email;

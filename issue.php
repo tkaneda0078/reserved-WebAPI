@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require $_SERVER['DOCUMENT_ROOT'] . 'api.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/api.php';
 
 $api = new Api();
 
